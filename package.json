@@ -1,0 +1,41 @@
+{
+	"name": "shelving-mock-indexeddb",
+	"description": "Unit tested mock implementation of the browser IndexedDB API.",
+	"version": "0.1.0",
+	"license": "0BSD",
+	"author": "Dave Houlbrooke <dave@shax.com>",
+	"main": "lib/mock.js",
+	"engines": {
+		"node": "^8.0.0"
+	},
+	"dependencies": {
+		"shelving-mock-event": "^1.0.8"
+	},
+	"devDependencies": {
+		"eslint": "^3.19.0",
+		"jest": "^20.0.3"
+	},
+	"scripts": {
+		"test": "jest",
+		"watch": "jest --watchAll --no-watchman"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git://github.com/dhoulb/mock-indexeddb.git"
+	},
+	"eslintConfig": {
+		"extends": "eslint:recommended",
+		"env": {
+			"es6": true,
+			"node": true,
+			"jest": true
+		},
+		"rules": {
+			"valid-jsdoc": 2,
+			"global-require": 2,
+			"no-var": 2,
+			"prefer-const": 2,
+			"prefer-spread": 2
+		}
+	}
+}
