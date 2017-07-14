@@ -5,8 +5,9 @@
 	"license": "0BSD",
 	"author": "Dave Houlbrooke <dave@shax.com>",
 	"main": "lib/mock.js",
+	"engineStrict": true,
 	"engines": {
-		"node": "^8.0.0"
+		"node": ">=6.0.0"
 	},
 	"dependencies": {
 		"shelving-mock-event": "^1.0.8"
