@@ -2,19 +2,19 @@
 
 [![Build Status](https://travis-ci.org/dhoulb/mock-indexeddb.svg?branch=master)](https://travis-ci.org/dhoulb/mock-indexeddb)
 
-Fully unit tested mock implementation of the browser IndexedDB API. Conforms as closely as possible to the [https://www.w3.org/TR/IndexedDB/](W3C Indexed Database API) (version 1.0).
+Unit tested mock implementation of the browser IndexedDB API. Conforms as closely as possible to the [W3C Indexed Database API](https://www.w3.org/TR/IndexedDB/) (version 1.0).
 
-Currently this mock does not support two features from the IndexedDB 1.0 spec:
+**Important:** There are two outstanding features from the IndexedDB 1.0 spec that are not supported by this mock:
 
 - Enforcing constraint for unique indexes (throw `DOMException('DataError')` on `put()` and `add()` etc).
 - Indexes with array (multiple) keypaths and support for the `multiEntry` flag.
 
-This mock also does not support any functionality added in the 2.0 spec, such as `getAll()`, `getKey()`, `getAllKeys()` and `openKeyCursor()`
+**Please note:** This mock does not support any functionality added in the 2.0 spec, such as `getAll()`, `getKey()`, `getAllKeys()` and `openKeyCursor()`
 
 ## Examples
 
 ### Using IndexedDB mock for Jest tests
-This example shows the IndexedDB mock in use, showing how to require the mock, make it global (so your code can access it through `window.indexedDB` as it would in a browser).
+This example shows the IndexedDB mock in use for testing including requiring the mock, making it global (so your code can access it through `window.indexedDB`, as it would in a browser), and inserting/reading records.
 
 ```js
 // Require the mock.
@@ -38,27 +38,27 @@ afterEach(() => jest.runAllTimers());
 
 // Your tests...
 test('etc', () => {
-	
+
 	// Simple IndexedDB example.
 	// Open a connection to IndexedDB database (version 1).
 	const request = window.indexedDB.open('myDatabase', 1);
-	
+
 	// 'upgradeneeded' will be called as the IndexedDB currently doesn't contain any object stores or data.
 	request.addEventListener('upgradeneeded', () => {
-		
+
 		// Create an object store.
 		// IDBDatabase object is accessed by request.result
 		const store = request.result.createObjectStore('myStore', { keyPath: 'id', autoIncrement: true });
-		
+
 		// Create some indexes on some additional properties in the stores.
 		const index = store.createIndex('myNameIndex', 'name');
 		const index = store.createIndex('myLengthIndex', 'length');
-		
+
 	});
-	
+
 	// 'success' will be called after the 'upgradeneeded' event.
 	request.addEventListener('success', () => {
-		
+
 		// Create a readwrite transaction and put some data into the store.
 		const putTransaction = request.result.transaction(['myStore'], 'readwrite');
 		const putStore = putTransaction.objectStore('myStore');
@@ -66,7 +66,7 @@ test('etc', () => {
 		putStore.put({ name: 'Spaghetti', length: 22 }); // ID: 2
 		putStore.put({ name: 'Linguini', length: 28 }); // ID: 3
 		putStore.put({ name: 'Tagliatteli', length: 22 }); // ID: 4
-		
+
 		// Create a readonly transaction and read back the data.
 		const getTransaction = request.result.transaction(['myStore'], 'readonly');
 		const getStore = getTransaction.objectStore('myStore');
@@ -78,7 +78,7 @@ test('etc', () => {
 			// Result is { id: 4, name: 'Tagliatteli'...
 			console.log('Found', event.target.result);
 		});
-		
+
 		// Create a readonly transaction and count some data that matches the queries.
 		const indexTransaction = request.result.transaction(['myStore'], 'readonly');
 		const indexStore = indexTransaction.objectStore('myStore');
@@ -92,9 +92,9 @@ test('etc', () => {
 			// Result is 3.
 			console.log('Found ' + event.target.result + ' pastas with length > 20');
 		});
-		
+
 	});
-	
+
 });
 ```
 
@@ -102,7 +102,11 @@ test('etc', () => {
 
 ### IndexedDB
 
-The API of this mock is conformant to the [https://www.w3.org/TR/IndexedDB/](W3C Indexed Database API) (version 1.0). For additional usage examples please see the [https://developer.mozilla.org/en-US/docs/IndexedDB](Mozilla IndexedDB API) documentation. The mock provides the following objects (which together make up a fully mocked IndexedDB API):
+This mock is conformant to the [W3C Indexed Database API](https://www.w3.org/TR/IndexedDB/) (version 1.0). Once required and set as global (see the example above), it will work like the standard IndexedDB API. 
+
+For additional usage examples of the IndexedDB API see the [Mozilla IndexedDB API documentation](https://developer.mozilla.org/en-US/docs/IndexedDB). 
+
+For reference, this mock provides the following objects from the IndexedDB API:
 
 - `IDBFactory`
 - `IDBDatabase`
