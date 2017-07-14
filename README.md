@@ -1,6 +1,6 @@
 # IndexedDB mock
 
-[![Build Status](https://travis-ci.org/dhoulb/mock-indexeddb.svg?branch=master)](https://travis-ci.org/dhoulb/mock-indexeddb)
+[![Build Status](https://travis-ci.org/dhoulb/shelving-mock-indexeddb.svg?branch=master)](https://travis-ci.org/dhoulb/shelving-mock-indexeddb)
 
 Unit tested mock implementation of the browser IndexedDB API. Conforms as closely as possible to the [W3C Indexed Database API](https://www.w3.org/TR/IndexedDB/) (version 1.0).
 
