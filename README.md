@@ -1,4 +1,4 @@
-# IndexedDB mock
+# IndexedDB API mock
 
 [![Build Status](https://travis-ci.org/dhoulb/shelving-mock-indexeddb.svg?branch=master)](https://travis-ci.org/dhoulb/shelving-mock-indexeddb)
 
@@ -11,9 +11,15 @@ Unit tested mock implementation of the browser IndexedDB API. Conforms as closel
 
 **Please note:** This mock does not support any functionality added in the 2.0 spec, such as `getAll()`, `getKey()`, `getAllKeys()` and `openKeyCursor()`
 
-## Examples
+## Installation
 
-### Using IndexedDB mock for Jest tests
+```
+npm install shelving-mock-indexeddb
+```
+
+## Usage
+
+### Example: Using IndexedDB mock for Jest tests
 This example shows the IndexedDB mock in use for testing including requiring the mock, making it global (so your code can access it through `window.indexedDB`, as it would in a browser), and inserting/reading records.
 
 ```js
