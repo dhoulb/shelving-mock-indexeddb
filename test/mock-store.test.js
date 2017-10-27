@@ -1,4 +1,4 @@
-const { IDBFactory, IDBRequest, IDBCursorWithValue, IDBKeyRange, reset } = require('../lib/mock');
+const { IDBFactory, IDBRequest, IDBCursorWithValue, IDBKeyRange, DOMException, reset } = require('../lib/mock');
 
 // Vars.
 const indexedDB = new IDBFactory;
@@ -122,7 +122,7 @@ describe('IndexedDB mock object store', () => {
 		request.onsuccess = jest.fn(e => {
 
 			// Put.
-			const request = e.target.result.transaction('store', 'readwrite').objectStore('store').put({a:1,b:2,c:3}); // No key.
+			const request = e.target.result.transaction('store', 'readwrite').objectStore('store').add({a:1,b:2,c:3});
 			expect(request).toBeInstanceOf(IDBRequest);
 			request.onsuccess = success;
 
@@ -247,6 +247,62 @@ describe('IndexedDB mock object store', () => {
 
 			// Put.
 			const request = e.target.result.transaction('store', 'readwrite').objectStore('store').add({a:1,b:2,c:3}); // No key.
+			expect(request).toBeInstanceOf(IDBRequest);
+			request.onsuccess = success;
+
+		});
+
+		// Run.
+		jest.runAllTimers();
+
+		// Check handlers.
+		expect(request.onupgradeneeded).toHaveBeenCalled();
+		expect(request.onsuccess).toHaveBeenCalled();
+		expect(success).toHaveBeenCalled();
+
+	});
+	test('put(): Disallow primative values as records (inline key)', () => {
+
+		// Events.
+		const request = indexedDB.open('testing', 1);
+		request.onupgradeneeded = jest.fn(e => {
+
+			// Create object store.
+			e.target.result.createObjectStore('store', { keyPath: 'id', autoIncrement: true });
+
+		});
+		request.onsuccess = jest.fn(e => {
+
+			// Put.
+			expect(() => e.target.result.transaction('store', 'readwrite').objectStore('store').put('abc')).toThrow(DOMException);  // Primative value throws DOMException.
+
+		});
+
+		// Run.
+		jest.runAllTimers();
+
+		// Check handlers.
+		expect(request.onupgradeneeded).toHaveBeenCalled();
+		expect(request.onsuccess).toHaveBeenCalled();
+
+	});
+	test('put(): Allow primative values as records (outline key)', () => {
+
+		// Handlers.
+		const success = jest.fn();
+
+		// Events.
+		const request = indexedDB.open('testing', 1);
+		request.onupgradeneeded = jest.fn(e => {
+
+			// Create object store.
+			e.target.result.createObjectStore('store', { keyPath: null, autoIncrement: true });
+
+		});
+		request.onsuccess = jest.fn(e => {
+
+			// Put.
+			const request = e.target.result.transaction('store', 'readwrite').objectStore('store').put('abc'); // Primative value.
 			expect(request).toBeInstanceOf(IDBRequest);
 			request.onsuccess = success;
 
