@@ -1,7 +1,7 @@
 {
 	"name": "shelving-mock-indexeddb",
 	"description": "Unit tested mock implementation of the browser IndexedDB API.",
-	"version": "1.0.6",
+	"version": "1.0.7",
 	"license": "0BSD",
 	"author": "Dave Houlbrooke <dave@shax.com>",
 	"main": "lib/mock.js",
