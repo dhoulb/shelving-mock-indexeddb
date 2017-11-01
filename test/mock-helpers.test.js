@@ -1,7 +1,40 @@
-const { IDBKeyRange, clone, validIdentifier, validKeyPath, validMultiKeyPath, validVersion, validKey, validKeyRange, keyInRange } = require('../lib/mock');
+const { IDBKeyRange, helpers } = require('../lib/mock');
+
+// Polyfills for browser APIs.
+require('blob-polyfill');
+
+// Destructure helpers.
+const { clone, validIdentifier, validKeyPath, validMultiKeyPath, validVersion, validKey, validKeyRange, keyInRange } = helpers;
 
 // Helpers.
 describe('IndexedDB mock helpers', () => {
+	test('clone(): Allows primatives', () => {
+		expect(clone(123)).toBe(123);
+		expect(() => clone(123)).not.toThrow(Error);
+		expect(clone('abc')).toBe('abc');
+		expect(() => clone('abc')).not.toThrow(Error);
+		expect(clone(true)).toBe(true);
+		expect(() => clone(true)).not.toThrow(Error);
+		expect(clone(false)).toBe(false);
+		expect(() => clone(false)).not.toThrow(Error);
+		expect(clone(undefined)).toBe(undefined);
+		expect(() => clone(undefined)).not.toThrow(Error);
+		expect(clone(null)).toBe(null);
+		expect(() => clone(null)).not.toThrow(Error);
+	});
+	test('clone(): Allows instances of structured-cloneable objects (available in Node)', () => {
+		expect(() => clone(new RegExp('/[a-z]/'))).not.toThrow(Error);
+		expect(() => clone(new String('abc'))).not.toThrow(Error);
+		expect(() => clone(new Number(123))).not.toThrow(Error);
+		expect(() => clone(new Boolean(true))).not.toThrow(Error);
+		expect(() => clone(new Date())).not.toThrow(Error);
+		expect(() => clone(new ArrayBuffer())).not.toThrow(Error);
+		expect(() => clone(new Array())).not.toThrow(Error);
+		expect(() => clone(new Object())).not.toThrow(Error);
+		expect(() => clone(new Set())).not.toThrow(Error);
+		expect(() => clone(new Map())).not.toThrow(Error);
+		expect(() => clone(new Blob())).not.toThrow(Error); // eslint-disable-line no-undef
+	});
 	test('clone(): Correctly deep-clones objects', () => {
 		const obj1 = {'a':{'aa':11,'ab':12},b:2,c:[31,32]};
 		const obj2 = clone(obj1);
@@ -18,13 +51,8 @@ describe('IndexedDB mock helpers', () => {
 		expect(arr2[0]).not.toBe(arr1[0]);
 		expect(arr2[2]).not.toBe(arr1[2]);
 	});
-	test('clone(): Rejects non-plain objects and arrays', () => {
-		expect(() => clone(String)).toThrow(Error);
-		expect(() => clone(new class Something {})).toThrow(Error);
-		expect(() => clone(new class Something extends Array {})).toThrow(Error);
-	});
-	test('clone(): Rejects undefined', () => {
-		expect(() => clone(undefined)).toThrow(Error);
+	test('clone(): Rejects non-plain objects', () => {
+		expect(() => clone(new class Something { })).toThrow(Error);
 	});
 	test('validIdentifier(): Returns true for valid identifiers', () => {
 		expect(validIdentifier('a')).toBe(true);
