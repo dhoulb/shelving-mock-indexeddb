@@ -41,7 +41,8 @@ describe('IndexedDB mock connections', () => {
 			expect(db).toBeInstanceOf(IDBDatabase);
 			expect(db.name).toBe('testing');
 			expect(db.version).toBe(1);
-			expect(db.objectStoreNames).toEqual([]);
+			expect(db.objectStoreNames).toBeInstanceOf(Array);
+			expect(db.objectStoreNames).toHaveLength(0);
 
 			// Create all combinations of object store.
 			const storeoutline = db.createObjectStore('storeoutline', { keyPath: null, autoIncrement: false });
@@ -104,7 +105,11 @@ describe('IndexedDB mock connections', () => {
 			expect(db).toBeInstanceOf(IDBDatabase);
 			expect(db.name).toBe('testing');
 			expect(db.version).toBe(1);
-			expect(db.objectStoreNames).toEqual(storeNames); // Alphabetic order.
+			expect(db.objectStoreNames[0]).toEqual(storeNames[0]); // Alphabetic order.
+			expect(db.objectStoreNames[1]).toEqual(storeNames[1]); // Alphabetic order.
+			expect(db.objectStoreNames[2]).toEqual(storeNames[2]); // Alphabetic order.
+			expect(db.objectStoreNames[3]).toEqual(storeNames[3]); // Alphabetic order.
+			expect(db.objectStoreNames).toHaveLength(storeNames.length);
 
 			// Create several transactions.
 			const transaction = db.transaction(storeNames, 'readonly');
