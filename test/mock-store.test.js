@@ -494,6 +494,44 @@ describe('IndexedDB mock object store', () => {
 		expect(storeoutlinesuccess).toHaveBeenCalled();
 
 	});
+	test('getAll(): Get all records from object store', () => {
+
+		// Handlers.
+		const success = jest.fn(e => {
+			expect(e.target.result).toEqual([{a:1,b:2,c:3}, {a:2,b:3,c:4}, {a:3,b:4,c:5}]);
+		});
+
+		// Events.
+		const request = indexedDB.open('testing', 1);
+		request.onupgradeneeded = jest.fn(e => {
+
+			// Create object store.
+			e.target.result.createObjectStore('store', { keyPath: null, autoIncrement: false });
+
+		});
+		request.onsuccess = jest.fn(e => {
+
+			// Put.
+			e.target.result.transaction('store', 'readwrite').objectStore('store').put({a:1,b:2,c:3});
+			e.target.result.transaction('store', 'readwrite').objectStore('store').put({a:2,b:3,c:4});
+			e.target.result.transaction('store', 'readwrite').objectStore('store').put({a:3,b:4,c:5});
+
+			// Get.
+			const request = e.target.result.transaction('store', 'readonly').objectStore('store').getAll();
+			expect(request).toBeInstanceOf(IDBRequest);
+			request.onsuccess = success;
+
+		});
+
+		// Run.
+		jest.runAllTimers();
+
+		// Check handlers.
+		expect(request.onupgradeneeded).toHaveBeenCalled();
+		expect(request.onsuccess).toHaveBeenCalled();
+		expect(success).toHaveBeenCalled();
+
+	});
 	test('openCursor(): Get record from object store by cursor (outline key)', () => {
 
 		// Handlers.
