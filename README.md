@@ -16,7 +16,7 @@ Unit tested mock implementation of the browser IndexedDB API. Conforms as closel
 ## Installation
 
 ```
-npm install shelving-mock-indexeddb
+yarn add https://github.com/Wallapop/shelving-mock-indexeddb
 ```
 
 ## Usage
