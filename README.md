@@ -10,8 +10,8 @@ Unit tested mock implementation of the browser IndexedDB API. Conforms as closel
 - Indexes with array (multiple) keypaths and support for the `multiEntry` flag.
 
 **Please note:**
-This version of the library includes a mock of the `getAll()` method without any optional params, functionality added in the 2.0 spec
-This mock does not support other functionality added in the 2.0 spec, such as `getKey()`, `getAllKeys()` and `openKeyCursor()`
+- This version of the library includes a mock of the `getAll()` method without any optional parameters
+- It does not support any other functionality added in the 2.0 spec, such as `getKey()`, `getAllKeys()` and `openKeyCursor()`
 
 ## Installation
 
