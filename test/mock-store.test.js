@@ -498,7 +498,7 @@ describe('IndexedDB mock object store', () => {
 
 		// Handlers.
 		const success = jest.fn(e => {
-			expect(e.target.result).toEqual([{a:1,b:2,c:3}, {a:2,b:3,c:4}, {a:3,b:4,c:5}]);
+			expect(e.target.result).toEqual([{v:1},{v:2},{v:3}]);
 		});
 
 		// Events.
@@ -509,16 +509,17 @@ describe('IndexedDB mock object store', () => {
 			e.target.result.createObjectStore('store', { keyPath: null, autoIncrement: false });
 
 		});
+		let allRequest;
 		request.onsuccess = jest.fn(e => {
 
 			// Put.
-			e.target.result.transaction('store', 'readwrite').objectStore('store').put({a:1,b:2,c:3});
-			e.target.result.transaction('store', 'readwrite').objectStore('store').put({a:2,b:3,c:4});
-			e.target.result.transaction('store', 'readwrite').objectStore('store').put({a:3,b:4,c:5});
+			e.target.result.transaction('store', 'readwrite').objectStore('store').put({v:1}, 1);
+			e.target.result.transaction('store', 'readwrite').objectStore('store').put({v:2}, 2);
+			e.target.result.transaction('store', 'readwrite').objectStore('store').put({v:3}, 3);
 
 			// Get.
-			const request = e.target.result.transaction('store', 'readonly').objectStore('store').getAll();
-			expect(request).toBeInstanceOf(IDBRequest);
+			allRequest = e.target.result.transaction('store', 'readonly').objectStore('store').getAll();
+			expect(allRequest).toBeInstanceOf(IDBRequest);
 			request.onsuccess = success;
 
 		});
@@ -530,7 +531,6 @@ describe('IndexedDB mock object store', () => {
 		expect(request.onupgradeneeded).toHaveBeenCalled();
 		expect(request.onsuccess).toHaveBeenCalled();
 		expect(success).toHaveBeenCalled();
-
 	});
 	test('openCursor(): Get record from object store by cursor (outline key)', () => {
 
