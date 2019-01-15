@@ -509,7 +509,6 @@ describe('IndexedDB mock object store', () => {
 			e.target.result.createObjectStore('store', { keyPath: null, autoIncrement: false });
 
 		});
-		let allRequest;
 		request.onsuccess = jest.fn(e => {
 
 			// Put.
@@ -518,8 +517,8 @@ describe('IndexedDB mock object store', () => {
 			e.target.result.transaction('store', 'readwrite').objectStore('store').put({v:3}, 3);
 
 			// Get.
-			allRequest = e.target.result.transaction('store', 'readonly').objectStore('store').getAll();
-			expect(allRequest).toBeInstanceOf(IDBRequest);
+			const request = e.target.result.transaction('store', 'readonly').objectStore('store').getAll();
+			expect(request).toBeInstanceOf(IDBRequest);
 			request.onsuccess = success;
 
 		});
