@@ -9,7 +9,8 @@ Unit tested mock implementation of the browser IndexedDB API. Conforms as closel
 - Enforcing constraint for unique indexes (throw `DOMException('DataError')` on `put()` and `add()` etc).
 - Indexes with array (multiple) keypaths and support for the `multiEntry` flag.
 
-**Please note:** This mock does not support any functionality added in the 2.0 spec, such as `getAll()`, `getKey()`, `getAllKeys()` and `openKeyCursor()`
+**Please note:**
+This mock supports the `getAll()` method without any optional params, functionality added in the 2.0 spec, but it does not support other functionality added in the 2.0 spec, such as `getKey()`, `getAllKeys()` and `openKeyCursor()`
 
 ## Installation
 
